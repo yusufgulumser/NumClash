@@ -1,28 +1,48 @@
 /**
- * Sample React Native App
+ * NumClash - Zar ve İşlem Strateji Oyunu
  * https://github.com/facebook/react-native
  *
  * @format
  */
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import React, { useState } from 'react';
+import { StatusBar } from 'react-native';
+import HomeScreen from './src/screens/HomeScreen';
+import NumClashScreen from './src/screens/NumClashScreen';
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+type AppScreen = 'home' | 'game';
+
+const App: React.FC = () => {
+  const [currentScreen, setCurrentScreen] = useState<AppScreen>('home');
+  const [playerCount, setPlayerCount] = useState<number>(2);
+
+  const handleStartGame = (count: number) => {
+    setPlayerCount(count);
+    setCurrentScreen('game');
+  };
+
+  const handleBackToHome = () => {
+    setCurrentScreen('home');
+  };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
-    </View>
+    <>
+      <StatusBar 
+        barStyle="dark-content" 
+        backgroundColor="#f8f9fa" 
+        translucent={false}
+      />
+      
+      {currentScreen === 'home' ? (
+        <HomeScreen onStartGame={handleStartGame} />
+      ) : (
+        <NumClashScreen 
+          playerCount={playerCount} 
+          onBackToHome={handleBackToHome} 
+        />
+      )}
+    </>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+};
 
 export default App;
